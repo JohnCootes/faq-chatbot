@@ -1,23 +1,156 @@
 <!DOCTYPE html>
-<!-- saved from url=(0110)https://script.google.com/a/macros/johncootes.com/s/AKfycbxlmIujx7yGXsYSzraYKKNKc97vicA0Skn6yOltZKnj/dev?v=faq -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="chromevox" content-script="no">
+<html>
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="./faq_files/icon" nonce=""><link rel="stylesheet" href="./faq_files/217968410-mae_html_css_ltr.css">
-<script type="text/javascript" src="./faq_files/2367676169-warden_bin_i18n_warden__en_gb.js" nonce=""></script>
+<title>FAQ Chatbot</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f5f5;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  #chat-container {
+    background-color: white;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  #question {
+    width: calc(100% - 100px);
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  #submit {
+    width: 80px;
+    height: 38px;
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+
+  #submit:hover {
+    background-color: #0b6bd3;
+  }
+
+  #response-container {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    overflow-y: auto;
+    max-height: 300px;
+  }
+
+  .response {
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  .user {
+    background-color: #1e90ff;
+    color: white;
+    align-self: flex-end;
+  }
+
+  .bot {
+    background-color: #e1e1e1;
+  }
+
+  @keyframes spinner {
+    to { transform: rotate(360deg); }
+  }
+
+  .loading {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #1e90ff;
+    border-radius: 50%;
+    animation: spinner 1s linear infinite;
+    margin: 10px auto;
+  }
+</style>
 </head>
 <body>
-<iframe id="sandboxFrame" allow="accelerometer *; ambient-light-sensor *; autoplay *; camera *; clipboard-read *; clipboard-write *; encrypted-media *; fullscreen *; geolocation *; gyroscope *; magnetometer *; microphone *; midi *; payment *; picture-in-picture *; screen-wake-lock *; speaker *; sync-xhr *; usb *; web-share *; vibrate *; vr *" sandbox="allow-downloads allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" src="./faq_files/userCodeAppPanel.html">
-</iframe>
-<script type="text/javascript" nonce="">
-(function() {
-var el = document.getElementById('sandboxFrame');
-el.onload = function() {
-goog.script.init("\x7b\x22functionNames\x22:\x5b\x22doGet\x22,\x22render\x22,\x22loadLogin\x22,\x22loadHome\x22,\x22loadUform\x22,\x22loadOrder\x22,\x22loadReorder\x22,\x22loadFresh\x22,\x22loadMain\x22,\x22loadEmail\x22,\x22loadTest\x22,\x22loadFaq\x22,\x22getAnswer\x22,\x22CHAT1\x22,\x22getArray\x22,\x22updatePayment\x22,\x22updateFufill\x22,\x22updateTracking\x22,\x22updateExpected\x22,\x22getInfo\x22,\x22updateAddress\x22,\x22testTelephone\x22,\x22addNewRow\x22,\x22getDropDownArray\x22,\x22addFreshNewRow\x22,\x22getData\x22,\x22editCell\x22,\x22addRecord\x22,\x22getOrderData\x22,\x22editOrderCell\x22,\x22getReorderData\x22,\x22getFreshOrderData\x22,\x22editFreshOrderCell\x22,\x22login\x22,\x22onOpen\x22,\x22saveAsText\x22,\x22CHAT\x22\x5d,\x22sandboxMode\x22:\x22IFRAME_SANDBOX\x22,\x22callbackTimeout\x22:1830000,\x22deploymentId\x22:\x22AKfycbxlmIujx7yGXsYSzraYKKNKc97vicA0Skn6yOltZKnj\x22,\x22eei\x22:\x22\x22,\x22sandboxHost\x22:\x22https:\/\/n-64cnvuu4xf6l2ya7lq5gsyvmpe3ke6nq77uzisq-0lu-script.googleusercontent.com\x22,\x22clientSideProperties\x22:\x7b\x22google.script.sandbox.mode\x22:\x22IFRAME_SANDBOX\x22,\x22google.script.host.origin\x22:\x22https:\/\/docs.google.com\x22\x7d,\x22actionPrefix\x22:\x22\/a\/johncootes.com\/macros\/s\/AKfycbxlmIujx7yGXsYSzraYKKNKc97vicA0Skn6yOltZKnj\x22,\x22userHtml\x22:\x22\x3c!DOCTYPE html\x3e\\n\x3chtml\x3e\\n  \x3chead\x3e\\n    \x3cbase target\x3d\\\x22_top\\\x22\x3e\\n    \x3cstyle\x3e\\n      body \x7b\\n        font-family: Arial, sans-serif;\\n        margin: 0;\\n        padding: 20px;\\n        background-color: #f5f5f5;\\n      \x7d\\n      \\n      h1 \x7b\\n        text-align: center;\\n        margin-bottom: 20px;\\n      \x7d\\n      \\n      #chat-container \x7b\\n        background-color: white;\\n        max-width: 600px;\\n        margin: 0 auto;\\n        padding: 20px;\\n        border-radius: 10px;\\n        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\\n      \x7d\\n      \\n   #question \x7b\\n  width: calc(100% - 100px);\\n  box-sizing: border-box;\\n  padding: 10px;\\n  border: 1px solid #ccc;\\n  border-radius: 4px;\\n\x7d\\n\\n#submit \x7b\\n  width: 80px;\\n  height: 38px;\\n  background-color: #1e90ff;\\n  color: white;\\n  border: none;\\n  border-radius: 4px;\\n  cursor: pointer;\\n  margin-left: 10px;\\n\x7d\\n\\n      \\n      #submit:hover \x7b\\n        background-color: #0b6bd3;\\n      \x7d\\n      \\n      #response-container \x7b\\n        margin-top: 20px;\\n        padding: 10px;\\n        background-color: #f1f1f1;\\n        border-radius: 5px;\\n        overflow-y: auto;\\n        max-height: 300px;\\n      \x7d\\n      \\n      .response \x7b\\n        margin-bottom: 10px;\\n        padding: 5px 10px;\\n        border-radius: 5px;\\n      \x7d\\n      \\n      .user \x7b\\n        background-color: #1e90ff;\\n        color: white;\\n        align-self: flex-end;\\n      \x7d\\n      \\n      .bot \x7b\\n        background-color: #e1e1e1;\\n      \x7d\\n\\n      @keyframes spinner \x7b\\n  to \x7b transform: rotate(360deg); \x7d\\n\x7d\\n\\n.loading \x7b\\n  display: none;\\n  width: 20px;\\n  height: 20px;\\n  border: 2px solid #f3f3f3;\\n  border-top: 2px solid #1e90ff;\\n  border-radius: 50%;\\n  animation: spinner 1s linear infinite;\\n  margin: 10px auto;\\n\x7d\\n\\n\\n    \x3c\\\/style\x3e\\n  \x3c\\\/head\x3e\\n  \x3cbody\x3e\\n    \x3ch1\x3eNeed Help?\x3c\\\/h1\x3e\\n    \x3cdiv id\x3d\\\x22chat-container\\\x22\x3e\\n      \x3cinput type\x3d\\\x22text\\\x22 id\x3d\\\x22question\\\x22 placeholder\x3d\\\x22Type your question...\\\x22\x3e\\n      \x3cbutton id\x3d\\\x22submit\\\x22\x3eSubmit\x3c\\\/button\x3e\\n    \x3cdiv id\x3d\\\x22response-container\\\x22\x3e\\n  \x3cdiv id\x3d\\\x22loading-wrapper\\\x22 style\x3d\\\x22text-align:center;\\\x22\x3e\\n    \x3cdiv id\x3d\\\x22loading\\\x22 class\x3d\\\x22loading\\\x22\x3e\x3c\\\/div\x3e\\n  \x3c\\\/div\x3e\\n\x3c\\\/div\x3e\\n\x3c\\\/div\x3e\\n    \x3cscript\x3e\\n     document.getElementById(\x27submit\x27).addEventListener(\x27click\x27, function() \x7b\\n  var question \x3d document.getElementById(\x27question\x27).value;\\n  if (question) \x7b\\n    var responseContainer \x3d document.getElementById(\x27response-container\x27);\\n    var userResponse \x3d document.createElement(\x27div\x27);\\n    userResponse.className \x3d \x27response user\x27;\\n    userResponse.innerText \x3d question;\\n    responseContainer.appendChild(userResponse);\\n    responseContainer.scrollTop \x3d responseContainer.scrollHeight;\\n    document.getElementById(\x27question\x27).value \x3d \x27\x27;\\n\\n    \\n    var loadingWrapper \x3d document.createElement(\x27div\x27);\\n    loadingWrapper.style.textAlign \x3d \x27center\x27;\\n    var loading \x3d document.createElement(\x27div\x27);\\n    loading.className \x3d \x27loading\x27;\\n    loading.style.display \x3d \x27block\x27;\\n    loadingWrapper.appendChild(loading);\\n    responseContainer.appendChild(loadingWrapper);\\n    responseContainer.scrollTop \x3d responseContainer.scrollHeight;\\n\\n    google.script.run\\n      .withSuccessHandler(function(answer) \x7b\\n        \\n        responseContainer.removeChild(loadingWrapper);\\n\\n        var botResponse \x3d document.createElement(\x27div\x27);\\n        botResponse.className \x3d \x27response bot\x27;\\n        botResponse.innerText \x3d answer;\\n        responseContainer.appendChild(botResponse);\\n        responseContainer.scrollTop \x3d responseContainer.scrollHeight;\\n      \x7d)\\n      .withFailureHandler(function(err) \x7b\\n        \\n        responseContainer.removeChild(loadingWrapper);\\n\\n        var botResponse \x3d document.createElement(\x27div\x27);\\n        botResponse.className \x3d \x27response bot\x27;\\n        botResponse.innerText \x3d \x27Error: \x27 + err;\\n        responseContainer.appendChild(botResponse);\\n        responseContainer.scrollTop \x3d responseContainer.scrollHeight;\\n      \x7d)\\n      .getAnswer(question);\\n  \x7d\\n\x7d);\\n\\n\\n    \x3c\\\/script\x3e\\n  \x3c\\\/body\x3e\\n\x3c\\\/html\x3e\\n\x22,\x22ncc\x22:\x22\x7b\\\x22awhs\\\x22:true\x7d\x22\x7d", "AJuLMu339cAlGWG7uLVjtHT6yLdVDnWTfQ:1680346650125", undefined, false , true  , "true", "https:\/\/n-64cnvuu4xf6l2ya7lq5gsyvmpe3ke6nq77uzisq-0lu-script.googleusercontent.com");}
-el.src = 'https:\/\/n-64cnvuu4xf6l2ya7lq5gsyvmpe3ke6nq77uzisq-0lu-script.googleusercontent.com\/userCodeAppPanel';
-}());
-</script>
+  <h1>Need Help?</h1>
+  <div id="chat-container">
+    <input type="text" id="question" placeholder="Type your question...">
+    <button id="submit">Submit</button>
+    <div id="response-container">
+      <div id="loading-wrapper" style="text-align:center;">
+        <div id="loading" class="loading"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.getElementById('submit').addEventListener('click', function() {
+      var question = document.getElementById('question').value;
+      if (question) {
+        var responseContainer = document.getElementById('response-container');
+        var userResponse = document.createElement('div');
+        userResponse.className = 'response user';
+        userResponse.innerText = question;
+        responseContainer.appendChild(userResponse);
+        responseContainer.scrollTop = responseContainer.scrollHeight;
+        document.getElementById('question').value = '';
 
+        var loadingWrapper = document.createElement('div');
+        loadingWrapper.styletextAlign = 'center';
+        var loading = document.createElement('div');
+        loading.className = 'loading';
+        loadingWrapper.appendChild(loading);
+        responseContainer.appendChild(loadingWrapper);
+        responseContainer.scrollTop = responseContainer.scrollHeight;
 
-</body></html>
+        setTimeout(function() {
+          responseContainer.removeChild(loadingWrapper);
+
+          var botResponse = document.createElement('div');
+          botResponse.className = 'response bot';
+          botResponse.innerText = getBotAnswer(question);
+          responseContainer.appendChild(botResponse);
+          responseContainer.scrollTop = responseContainer.scrollHeight;
+        }, 1000);
+      }
+    });
+
+    function getBotAnswer(question) {
+      var botAnswers = {
+        'What is your name?': 'I am a Chatbot.',
+        'How are you?': 'As an AI, I do not have emotions, but I am functioning properly.',
+        'Can you help me?': 'Of course, I am here to help you with your questions.'
+      };
+
+      var lowercaseQuestion = question.toLowerCase();
+      for (var key in botAnswers) {
+        if (botAnswers.hasOwnProperty(key)) {
+          if (lowercaseQuestion.includes(key.toLowerCase())) {
+            return botAnswers[key];
+          }
+        }
+      }
+
+      return 'I am sorry, but I do not understand your question. Please try again.';
+    }
+  </script>
+</body>
+</html>
