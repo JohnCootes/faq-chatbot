@@ -1,156 +1,283 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FAQ Chatbot</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: #f5f5f5;
-  }
+  <head>
+    <base target="_top">
+    <style>
+      /* Add styles for the chat icon */
+      .chat-icon {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        background-color: #0084ff;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        z-index: 1000;
+      }
 
-  h1 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
+body {
+  background-color: transparent;
+}
+      .chat-icon img {
+        width: 30px;
+        height: 30px;
+      }
 
-  #chat-container {
-    background-color: white;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+      /* Wrap chat container in a modal */
+.chat-modal {
+  display: none;
+  position: fixed;
+  z-index: 1001;
+  right: 20px;
+  bottom: 80px;
+  width: 300px;
+  height: 400px;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
 
-  #question {
-    width: calc(100% - 100px);
-    box-sizing: border-box;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
 
-  #submit {
-    width: 80px;
-    height: 38px;
-    background-color: #1e90ff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-left: 10px;
-  }
 
-  #submit:hover {
-    background-color: #0b6bd3;
-  }
+      /* Add styles for the chat container */
+      #chat-container {
+        background-color: transparent;
+        width: 350px;
+        height: 500px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
 
-  #response-container {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #f1f1f1;
-    border-radius: 5px;
-    overflow-y: auto;
-    max-height: 300px;
-  }
+      /* Add gradient background */
+    .gradient-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px; /* Adjust the header height */
+  background-image: linear-gradient(120deg, #0084ff, #00c6ff);
+}
 
-  .response {
-    margin-bottom: 10px;
-    padding: 5px 10px;
-    border-radius: 5px;
-  }
+      /* Add styles for the close button */
+      .close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 20px;
+        height: 20px;
+        background-color: #ccc;
+        border: none;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+      }
 
-  .user {
-    background-color: #1e90ff;
-    color: white;
-    align-self: flex-end;
-  }
+      .close-button:hover {
+        background-color: #999;
+      }
 
-  .bot {
-    background-color: #e1e1e1;
-  }
+      /* Add styles for input and submit button */
+      .input-container {
+        display: flex;
+        padding: 0 10px 10px;
+        background-color: #fff;
+      }
 
-  @keyframes spinner {
-    to { transform: rotate(360deg); }
-  }
+    #question {
+  width: calc(100% - 110px);
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
 
-  .loading {
-    display: none;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #f3f3f3;
-    border-top: 2px solid #1e90ff;
-    border-radius: 50%;
-    animation: spinner 1s linear infinite;
-    margin: 10px auto;
-  }
-</style>
-</head>
-<body>
-  <h1>Need Help?</h1>
-  <div id="chat-container">
-    <input type="text" id="question" placeholder="Type your question...">
-    <button id="submit">Submit</button>
-    <div id="response-container">
-      <div id="loading-wrapper" style="text-align:center;">
-        <div id="loading" class="loading"></div>
+#submit {
+  width: 90px;
+  height: 38px;
+  background-color: #1e90ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+
+      #submit:hover {
+        background-color: #0077e6;
+      }
+
+ #response-container {
+  flex: 1;
+  padding: 10px;
+  background-color: white;
+  border-radius: 0 0 12px 12px;
+  overflow-y: auto;
+}
+
+
+      .response {
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  max-width: 75%;
+  display: inline-block;
+  clear: both;
+  margin-top: 50px; /* Add this line */
+}
+
+
+      .user {
+        background-color: #0084ff;
+        color: white;
+        float: right;
+      }
+
+      .bot {
+        background-color: #f1f1f1;
+        color: black;
+        float: left;
+      }
+
+      .clearfix {
+        clear: both;
+      }
+
+      @keyframes spinner {
+        to { transform: rotate(360deg); }
+      }
+
+      .loading {
+        display: none;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #0084ff;
+        border-radius: 50%;
+        animation: spinner 1s linear infinite;
+        margin: 10px auto;
+      }
+
+       #chat-input-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #1e90ff;
+        padding: 10px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+      }
+      .help-text {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+      
+    </style>
+  </head>
+  <body>
+    <!-- Add chat icon -->
+    <div class="chat-icon" onclick="openChat()">
+ <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="white">
+  <path d="M12 2C6.486 2 2 6.486 2 12c0 1.848.634 3.575 1.732 5.005L2.055 22l4.949-1.728C8.425 21.366 10.151 22 12 22c5.514 0 10-4.486 10-10s-4.486-10-10-10z"/>
+</svg>
+
+
+
+
+</div>
+
+
+    <!-- Wrap chat container in a modal -->
+    <div id="chat-modal" class="chat-modal">
+      <div id="chat-container">
+        <div class="gradient-bg"></div>
+        <div class="help-text">How can we help you?</div>
+        <button class="close-button" onclick="closeChat()">&times;</button>
+        <div id="response-container">
+          <div id="loading-wrapper" style="text-align:center;">
+            <div id="loading" class="loading"></div>
+          </div>
+        </div>
+        <div class="input-container">
+          <input type="text" id="question" placeholder="Type your question...">
+          <button id="submit">Submit</button>
+        </div>
       </div>
     </div>
-  </div>
-  <script>
-    document.getElementById('submit').addEventListener('click', function() {
-      var question = document.getElementById('question').value;
-      if (question) {
-        var responseContainer = document.getElementById('response-container');
-        var userResponse = document.createElement('div');
-        userResponse.className = 'response user';
-        userResponse.innerText = question;
-        responseContainer.appendChild(userResponse);
-        responseContainer.scrollTop = responseContainer.scrollHeight;
-        document.getElementById('question').value = '';
 
-        var loadingWrapper = document.createElement('div');
-        loadingWrapper.styletextAlign = 'center';
-        var loading = document.createElement('div');
-        loading.className = 'loading';
-        loadingWrapper.appendChild(loading);
-        responseContainer.appendChild(loadingWrapper);
-        responseContainer.scrollTop = responseContainer.scrollHeight;
-
-        setTimeout(function() {
-          responseContainer.removeChild(loadingWrapper);
-
-          var botResponse = document.createElement('div');
-          botResponse.className = 'response bot';
-          botResponse.innerText = getBotAnswer(question);
-          responseContainer.appendChild(botResponse);
-          responseContainer.scrollTop = responseContainer.scrollHeight;
-        }, 1000);
-      }
-    });
-
-    function getBotAnswer(question) {
-      var botAnswers = {
-        'What is your name?': 'I am a Chatbot.',
-        'How are you?': 'As an AI, I do not have emotions, but I am functioning properly.',
-        'Can you help me?': 'Of course, I am here to help you with your questions.'
-      };
-
-      var lowercaseQuestion = question.toLowerCase();
-      for (var key in botAnswers) {
-        if (botAnswers.hasOwnProperty(key)) {
-          if (lowercaseQuestion.includes(key.toLowerCase())) {
-            return botAnswers[key];
-          }
-        }
+    <script>
+      function openChat() {
+        document.getElementById('chat-modal').style.display = 'flex';
       }
 
-      return 'I am sorry, but I do not understand your question. Please try again.';
-    }
-  </script>
-</body>
+      function closeChat() {
+        document.getElementById('chat-modal').style.display = 'none';
+      }
+
+document.getElementById('submit').addEventListener('click', function() {
+  var question = document.getElementById('question').value;
+  if (question) {
+    var responseContainer = document.getElementById('response-container');
+    var userResponse = document.createElement('div');
+    userResponse.className = 'response user';
+    userResponse.innerText = question;
+    responseContainer.appendChild(userResponse);
+    responseContainer.scrollTop = responseContainer.scrollHeight;
+    document.getElementById('question').value = '';
+
+    // Create and show loading animation
+    var loadingWrapper = document.createElement('div');
+    loadingWrapper.style.textAlign = 'center';
+    var loading = document.createElement('div');
+    loading.className = 'loading';
+    loading.style.display = 'block';
+    loadingWrapper.appendChild(loading);
+    responseContainer.appendChild(loadingWrapper);
+    responseContainer.scrollTop = responseContainer.scrollHeight;
+
+    google.script.run
+      .withSuccessHandler(function(answer) {
+        // Hide and remove loading animation
+        responseContainer.removeChild(loadingWrapper);
+
+        var botResponse = document.createElement('div');
+        botResponse.className = 'response bot';
+        botResponse.innerText = answer;
+        responseContainer.appendChild(botResponse);
+        responseContainer.scrollTop = responseContainer.scrollHeight;
+      })
+      .withFailureHandler(function(err) {
+        // Hide and remove loading animation
+        responseContainer.removeChild(loadingWrapper);
+
+        var botResponse = document.createElement('div');
+        botResponse.className = 'response bot';
+        botResponse.innerText = 'Error: ' + err;
+        responseContainer.appendChild(botResponse);
+        responseContainer.scrollTop = responseContainer.scrollHeight;
+      })
+      .getAnswer(question);
+  }
+});
+
+      // ...existing script...
+    </script>
+  </body>
 </html>
